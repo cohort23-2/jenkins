@@ -24,5 +24,10 @@ pipeline {
                 echo "Deploying ..."
             }
         }
+        stage("Post-Deploy"){
+            steps{
+                echo "Sending email to a team ..."
+            }
+        }
     }
 }
