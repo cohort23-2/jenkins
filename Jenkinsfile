@@ -1,4 +1,4 @@
-# Declarative Jenkins Pipeline 
+// # Declarative Jenkins Pipeline 
 pipeline {
     agent any 
     stages {
