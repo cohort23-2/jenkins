@@ -3,16 +3,28 @@ resource "aws_instance" "app" {
   count         = var.create_ec2 ? 1 : 0
   ami           = "ami-0715c1897453cabd1"
   instance_type = var.instance_type
+  key_name      = "tbadmin"
 
-  tags = local.common_tags
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "App"
+    }
+  )
 }
 
 resource "aws_instance" "web" {
   count         = var.create_ec2 ? 1 : 0
   ami           = "ami-053b0d53c279acc90"
   instance_type = var.instance_type
+  key_name      = "tbadmin"
 
-  tags = local.common_tags
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "Web"
+    }
+  )
 }
 
 locals {
