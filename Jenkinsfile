@@ -1,11 +1,34 @@
 // # Declarative Jenkins Pipeline 
 pipeline {
-    agent any 
+    agent none  //Global agent
+    
+    // global environments
+    environment {
+        NAME="Kanat"
+    }
+
+    options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: "", artifactNumToKeepStr: "", daysToKeepStr: "7", numToKeepStr: "5")
+    }
+
+    // parameters {
+    //     string(name: "BRANCH_NAME", defaultValue:"", description: "The Git Branch name to build from")
+    //     choice choices: ["init", "plan", "apply", "destroy"], description: "The terraform options to apply to", name: "TFCHOICE"
+    // }
+    
     stages {
-        stage("Initialization") {
+        stage("Initialization on Windows") {
+            agent any
             steps {
                 // 
-                echo "Initializating ..."
+                echo "Initializating on Windows"
+                echo "Your name is ${NAME}"
+            }
+        }
+        stage("Initialiation on Linux") {
+            agent any
+            steps {
+                echo "Initializating on Linux "
             }
         }
         stage("Build"){
@@ -26,3 +49,4 @@ pipeline {
         }
     }
 }
+
