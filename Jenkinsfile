@@ -1,74 +1,31 @@
 pipeline {
     agent any
-
-    // global environments
-    environment {
-        REPO="git@github.com:seytech-devops/terraform-ansible-aws.git"
-        SSHKEY="sshkey"
-    }
-
-    options {
-        buildDiscarder logRotator(artifactDaysToKeepStr: "", artifactNumToKeepStr: "", daysToKeepStr: "7", numToKeepStr: "5")
-    }
-
     parameters {
-        string(name: "BRANCH_NAME", defaultValue:"", description: "The Git Branch name to build from")
-        choice choices: ["init", "plan", "apply", "destroy"], description: "The terraform options to apply to", name: "TFCHOICE"
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
     }
-    
+    environment {
+        MyNameIs = "Kanat"
+    }
+
     stages {
-        stage("SCM Checkout"){
-            steps{
-                checkout scmGit(branches: [[name: "**"]], extensions: [], userRemoteConfigs: [[credentialsId: "${SSHKEY}", url: "${REPO}"]])
-            }
-        }
-        stage("Change directory"){
-            steps{
-                sh """
-                cd ${WORKSPACE}
-                pwd
-                whoami
-                """
-            }
-        }
-        stage("Terraform init"){
-            steps{
-                sh """
-                terraform --version
-                cd ${WORKSPACE}/terraform
-                terraform init -no-color
-                """
-            }
-        }
-        stage("Terraform plan"){
-            steps{
-                sh """
-                cd ${WORKSPACE}/terraform
-                terraform plan -no-color
-                """
-            }
-        }
-        stage("Terraform apply"){
-            when {
-                beforeInput true 
-                expression {
-                    return (params.TFCHOICE == "apply" || params.TFCHOICE == "destroy")
-                }
-            }
+        stage('Example') {
             steps {
-                script {
-                    env.SELECTED_CHOICE = input message: "Please approve", ok: "deploy", parameters: [choice(choices: ["--auto-approve", "no"], description: "Approve or Cancel", name: "SELECTED_CHOICE")], submitter: "casesuroo"
-                }
-                echo "${env.SELECTED_CHOICE}"
-                sh """
-                cd ${WORKSPACE}/terraform
-                terraform ${params.TFCHOICE}  -no-color  ${env.SELECTED_CHOICE}
-                """
-            }
-        }
-        stage("Clean Workspace"){
-            steps{
-                cleanWs()
+                echo "Hello ${params.PERSON}"
+
+                echo "Biography: ${params.BIOGRAPHY}"
+
+                echo "Toggle: ${params.TOGGLE}"
+
+                echo "Choice: ${params.CHOICE}"
+
+                echo "Password: ${params.PASSWORD}, ${env.MyNameIs}"
             }
         }
     }
