@@ -9,7 +9,7 @@ resource "aws_instance" "app" {
 
 resource "aws_instance" "web" {
   count         = var.create_ec2 ? 1 : 0
-  ami           = "ami-053b0d53c279acc90 "
+  ami           = "ami-053b0d53c279acc90"
   instance_type = var.instance_type
 
   tags = local.common_tags
