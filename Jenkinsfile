@@ -8,12 +8,16 @@ pipeline {
     }
 
     options {
-        buildDiscarder logRotator(artifactDaysToKeepStr: "", artifactNumToKeepStr: "", daysToKeepStr: "7", numToKeepStr: "5")
+        buildDiscarder logRotator(artifactDaysToKeepStr: "", artifactNumToKeepStr: "", daysToKeepStr: "10", numToKeepStr: "8")
     }
 
-    // parameters {
-    //     string(name: "BRANCH_NAME", defaultValue:"", description: "The Git Branch name to build from")
-    //     choice choices: ["init", "plan", "apply", "destroy"], description: "The terraform options to apply to", name: "TFCHOICE"
+    parameters {
+        string(name: "BRANCH_NAME", defaultValue:"", description: "The Git Branch name to build from")
+        choice choices: ["init", "plan", "apply", "destroy"], description: "The terraform options to apply to", name: "TFCHOICE"
+    }
+
+    // trigger {
+
     // }
     
     stages {
