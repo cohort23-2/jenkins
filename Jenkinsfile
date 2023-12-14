@@ -34,6 +34,8 @@ pipeline {
         stage("Terraform init"){
             steps{
                 sh """
+                echo "This is a build number : ${BUILD_ID}"
+                echo "Jenkins : ${JOB_NAME}"
                 terraform --version
                 cd ${WORKSPACE}/terraform
                 terraform init -no-color
